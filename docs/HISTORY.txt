@@ -1,10 +1,12 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
+3.0.0 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Use collective.js.fullcalendar instead of bundling an old copy of
+  fullcalendar. This fixes compatibility with recent versions of jquery.
+  [davisagli]
 
 
 2.0.0 (2013-11-04)

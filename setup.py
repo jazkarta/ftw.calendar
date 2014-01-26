@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
-version = '2.0.1.dev0'
+version = '3.0.0.dev0'
 
 tests_require = ['ftw.testing [splinter]',
                  'ftw.builder',
@@ -35,6 +35,7 @@ setup(name='ftw.calendar',
       tests_require=tests_require,
       extras_require=dict(tests=tests_require),
       install_requires=[
+          'collective.js.fullcalendar',
           'setuptools',
           'simplejson',
           # -*- Extra requirements: -*-

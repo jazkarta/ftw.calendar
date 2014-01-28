@@ -13,9 +13,10 @@ div.fc {
 .fc-view {
     z-index: 0;
 }
-#content div.fc-event a,
-#content div.fc-event a:hover {
-    color: inherit;
+#content a.fc-event,
+#content a.fc-event:hover {
+    color: #fff;
+    padding: 1px;
 }
 div.fc-event.editable a {
     background-image: url(&dtml-portal_url;/transp.png);

@@ -25,7 +25,7 @@ class CalendarupdateView(BrowserView):
                 'query': DateTime(self.request.get('end')), 'range': 'max'},
             'end': {
                 'query': DateTime(self.request.get('start')), 'range': 'min'}}
-        if context.portal_type == 'Topic':
+        if context.portal_type in ('Topic', 'Collection'):
             brains = context.aq_inner.queryCatalog(REQUEST=self.request, **args)
         else:
             portal_calendar = getToolByName(context, 'portal_calendar')

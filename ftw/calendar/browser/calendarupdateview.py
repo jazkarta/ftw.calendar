@@ -1,3 +1,4 @@
+from plone.app.querystring.queryparser import parseFormquery
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from DateTime import DateTime
@@ -25,7 +26,13 @@ class CalendarupdateView(BrowserView):
                 'query': DateTime(self.request.get('end')), 'range': 'max'},
             'end': {
                 'query': DateTime(self.request.get('start')), 'range': 'min'}}
-        if context.portal_type in ('Topic', 'Collection'):
+        if context.portal_type == 'Collection':
+            rawquery = context.getRawQuery()
+            query = parseFormquery(context, rawquery, sort_on=context.getSort_on())
+            query.update(args)
+            catalog = getToolByName(context, 'portal_catalog')
+            brains = catalog(query)
+        elif context.portal_type == 'Topic':
             brains = context.aq_inner.queryCatalog(REQUEST=self.request, **args)
         else:
             portal_calendar = getToolByName(context, 'portal_calendar')

@@ -69,7 +69,7 @@ $(document).ready(function() {
         allDayText: '<tal:trans i18n:translate="all_day">All day</tal:trans>',
         firstDay: <span tal:replace="view/first_day">0</span>,
         weekMode: "liquid",
-        timeFormat: '<tal:trans i18n:translate="time_format">h:mm tt</tal:trans>',
+        timeFormat: '<tal:trans i18n:translate="time_format">h:mm tt { - h:mm tt}</tal:trans>',
         eventRender: function(event, element) {
             element.find("a").attr('title', event.description);
         },

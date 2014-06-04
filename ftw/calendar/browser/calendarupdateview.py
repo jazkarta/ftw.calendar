@@ -2,6 +2,8 @@ from plone.app.querystring.queryparser import parseFormquery
 from Products.CMFCore.utils import getToolByName
 from Products.Five import BrowserView
 from DateTime import DateTime
+from ftw.calendar.browser.interfaces import IFtwCalendarModifier
+from zope.component import queryUtility
 
 #from ftw.calendar import calendarMessageFactory as _
 import simplejson as json
@@ -11,7 +13,6 @@ class CalendarupdateView(BrowserView):
     """
     Calendarupdate browser view
     """
-
 
     def __call__(self, *args, **kw):
         """Render JS Initialization code"""
@@ -45,6 +46,8 @@ class CalendarupdateView(BrowserView):
         result = []
         memberid = self.context.portal_membership.getAuthenticatedMember().id
 
+        modifier = queryUtility(IFtwCalendarModifier)
+
         for brain in brains:
             if memberid in brain.Creator:
                 editable = True
@@ -54,16 +57,21 @@ class CalendarupdateView(BrowserView):
                 allday = True
             else:
                 allday = False
-            result.append({"id": "UID_%s" % (brain.UID),
-                           "title": brain.Title,
-                           "start": brain.start.ISO8601(),
-                           "end": brain.end.ISO8601(),
-                           "url": brain.getURL(),
-                           "editable": editable,
-                           "allDay": allday,
-                           "className": "state-" + str(brain.review_state) + \
-                                (editable and " editable" or ""),
-                           "description": brain.Description})
+            info = {
+                "id": "UID_%s" % (brain.UID),
+                "title": brain.Title,
+                "start": brain.start.ISO8601(),
+                "end": brain.end.ISO8601(),
+                "url": brain.getURL(),
+                "editable": editable,
+                "allDay": allday,
+                "className": "state-" + str(brain.review_state) + \
+                     (editable and " editable" or ""),
+                "description": brain.Description
+            }
+            if modifier:
+                modifier(brain, info)
+            result.append(info)
         return json.dumps(result, sort_keys=True)
 
 

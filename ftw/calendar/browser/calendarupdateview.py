@@ -5,7 +5,6 @@ from DateTime import DateTime
 from ftw.calendar.browser.interfaces import IFtwCalendarModifier
 from zope.component import queryUtility
 
-#from ftw.calendar import calendarMessageFactory as _
 import simplejson as json
 
 
@@ -39,9 +38,9 @@ class CalendarupdateView(BrowserView):
             portal_calendar = getToolByName(context, 'portal_calendar')
             catalog = getToolByName(context, 'portal_catalog')
             brains = catalog(
-                portal_type = portal_calendar.getCalendarTypes(),
-                path = {'depth': -1,
-                        'query': '/'.join(context.getPhysicalPath())}
+                portal_type=portal_calendar.getCalendarTypes(),
+                path={'depth': -1,
+                      'query': '/'.join(context.getPhysicalPath())}
             )
         result = []
         memberid = self.context.portal_membership.getAuthenticatedMember().id
@@ -53,10 +52,7 @@ class CalendarupdateView(BrowserView):
                 editable = True
             else:
                 editable = False
-            if brain.end - brain.start > 1.0:
-                allday = True
-            else:
-                allday = False
+            duration = (brain.end - brain.start) * 86400
             info = {
                 "id": "UID_%s" % (brain.UID),
                 "title": brain.Title,
@@ -64,9 +60,8 @@ class CalendarupdateView(BrowserView):
                 "end": brain.end.ISO8601(),
                 "url": brain.getURL(),
                 "editable": editable,
-                "allDay": allday,
-                "className": "state-" + str(brain.review_state) + \
-                     (editable and " editable" or ""),
+                "allDay": duration >= 86340,
+                "className": "state-" + str(brain.review_state) + (editable and " editable" or ""),
                 "description": brain.Description
             }
             if modifier:
@@ -84,7 +79,7 @@ class CalendarDropView(BrowserView):
 
         if event_uid:
             event_uid = event_uid.split('UID_')[1]
-        brains = self.context.portal_catalog(UID = event_uid)
+        brains = self.context.portal_catalog(UID=event_uid)
 
         obj = brains[0].getObject()
         startDate, endDate = obj.startDate, obj.endDate
@@ -107,7 +102,7 @@ class CalendarResizeView(BrowserView):
         event_uid = request.get('event')
         if event_uid:
             event_uid = event_uid.split('UID_')[1]
-        brains = self.context.portal_catalog(UID = event_uid)
+        brains = self.context.portal_catalog(UID=event_uid)
         obj = brains[0].getObject()
         endDate = obj.endDate
         dayDelta, minuteDelta = float(request.get('dayDelta')), \

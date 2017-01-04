@@ -4,6 +4,9 @@ Changelog
 3.0.0 (unreleased)
 ------------------
 
+- Fixed bug where date range was not applied.
+  [lknoepfel]
+
 - Use collective.js.fullcalendar instead of bundling an old copy of
   fullcalendar. This fixes compatibility with recent versions of jquery.
   [davisagli]

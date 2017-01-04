@@ -40,7 +40,8 @@ class CalendarupdateView(BrowserView):
             brains = catalog(
                 portal_type=portal_calendar.getCalendarTypes(),
                 path={'depth': -1,
-                      'query': '/'.join(context.getPhysicalPath())}
+                      'query': '/'.join(context.getPhysicalPath())},
+                **args
             )
         result = []
         memberid = self.context.portal_membership.getAuthenticatedMember().id

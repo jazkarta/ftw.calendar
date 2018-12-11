@@ -21,11 +21,14 @@ class CalendarupdateView(BrowserView):
 
         response.setHeader('Content-Type', 'application/x-javascript')
 
-        args = {
-            'start': {
-                'query': DateTime(self.request.get('end')), 'range': 'max'},
-            'end': {
-                'query': DateTime(self.request.get('start')), 'range': 'min'}}
+        args = {}
+        if self.request.get('end'):
+            args['start'] = {'query': DateTime(self.request.get('start')),
+                             'range': 'min'}
+        if self.request.get('end'):
+            args['end'] = {'query': DateTime(self.request.get('end')),
+                           'range': 'max'}
+
         if context.portal_type == 'Collection':
             rawquery = context.getRawQuery()
             query = parseFormquery(context, rawquery, sort_on=context.getSort_on())

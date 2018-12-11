@@ -22,7 +22,7 @@ class CalendarupdateView(BrowserView):
         response.setHeader('Content-Type', 'application/x-javascript')
 
         args = {}
-        if self.request.get('end'):
+        if self.request.get('start'):
             args['start'] = {'query': DateTime(self.request.get('start')),
                              'range': 'min'}
         if self.request.get('end'):

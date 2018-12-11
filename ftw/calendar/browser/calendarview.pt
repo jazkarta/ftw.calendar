@@ -3,6 +3,9 @@
       metal:use-macro="here/main_template/macros/master"
       i18n:domain="ftw.calendar">
   <metal:javascriptslot fill-slot="javascript_head_slot">
+    <tal:tag replace='structure string:<script>' />
+      var _ftw_events_base_url = '<span tal:replace="context/absolute_url" />';
+    <tal:tag replace='structure string:</script>' />
     <script type="text/javascript" 
         tal:attributes="src string:${portal_url}/ftwcalendar_config.js"></script>
   </metal:javascriptslot>

@@ -22,11 +22,13 @@ class CalendarupdateView(BrowserView):
         response.setHeader('Content-Type', 'application/x-javascript')
 
         args = {}
+        # We need to add two days to either end of the date range, to avoid weird
+        # leap year bug.
         if self.request.get('start'):
-            args['start'] = {'query': DateTime(self.request.get('start')),
+            args['start'] = {'query': DateTime(self.request.get('start')) - 2,
                              'range': 'min'}
         if self.request.get('end'):
-            args['end'] = {'query': DateTime(self.request.get('end')),
+            args['end'] = {'query': DateTime(self.request.get('end')) + 2,
                            'range': 'max'}
 
         if context.portal_type == 'Collection':

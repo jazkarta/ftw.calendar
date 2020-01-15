@@ -7,6 +7,7 @@ from zope.component import queryUtility
 
 import simplejson as json
 
+DEFAULT_CAL_TYPES = ['Event']
 
 class CalendarupdateView(BrowserView):
     """
@@ -40,10 +41,13 @@ class CalendarupdateView(BrowserView):
         elif context.portal_type == 'Topic':
             brains = context.aq_inner.queryCatalog(REQUEST=self.request, **args)
         else:
-            portal_calendar = getToolByName(context, 'portal_calendar')
+            portal_calendar = getToolByName(context, 'portal_calendar', None)
             catalog = getToolByName(context, 'portal_catalog')
+            cal_types = DEFAULT_CAL_TYPES
+            if portal_calendar is not None:
+                cal_types = portal_calendar.getCalendarTypes()
             brains = catalog(
-                portal_type=portal_calendar.getCalendarTypes(),
+                portal_type=cal_types,
                 path={'depth': -1,
                       'query': '/'.join(context.getPhysicalPath())},
                 **args
